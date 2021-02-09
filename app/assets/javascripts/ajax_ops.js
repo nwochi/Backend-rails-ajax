@@ -52,11 +52,12 @@ function handle_ajax(event) {
         } else {
           response.json().then((data) => {
             alert(`Return code ${response.status} ${response.statusText} ${JSON.stringify(data)}`);
-          }).catch((error) => {
-            console.log(error);
-            alert(error);
           });
+          
         }
+      }).catch((error) => {
+        console.log(error);
+        alert(error);
       });
     } else if (event.target === updateUserButton) {
       var dataObject = {
@@ -83,6 +84,148 @@ function handle_ajax(event) {
             resultsDiv.appendChild(parag);
           });
         } else {
+          alert(`Return code ${response.status} ${response.statusText}`);
+        }
+      });
+    } else if (event.target === createFactsButton) {
+      var dataObject = {
+        username: userName.value,
+        password: userPassword.value
+      }
+      fetch(users_path,
+        { method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(dataObject)
+        }
+      ).then((response) => {
+        if (response.status === 201) {
+          response.json().then((data) => {
+            resultsDiv.innerHTML = '';
+            let parag = document.createElement('P');
+            parag.textContent = JSON.stringify(data);
+            resultsDiv.appendChild(parag);
+          });
+        } else {
+          response.json().then((data) => {
+            alert(`Return code ${response.status} ${response.statusText} ${JSON.stringify(data)}`);
+          }).catch((error) => {
+            console.log(error);
+            alert(error);
+          });
+        }
+      });
+      
+    } else if (event.target === updateFactButton) {
+      var dataObject = {
+        username: userName1.value,
+        password: userPassword1.value
+      }
+      if (dataObject.username === "") {  // blank usernames not supported
+        delete dataObject.username;
+      }
+      if (dataObject.password === "") { // blank passwords not supported
+        delete dataObject.password;
+      }
+      fetch(`${users_path}/${userID.value}`,
+        { method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(dataObject)
+        }
+      ).then((response) => {
+        if (response.status === 200) {
+          response.json().then((data) => {
+            resultsDiv.innerHTML = '';
+            let parag = document.createElement('P');
+            parag.textContent = JSON.stringify(data);
+            resultsDiv.appendChild(parag);
+          });
+        } else {
+          alert(`Return code ${response.status} ${response.statusText}`);
+        }
+      });
+    } else if (event.target === deleteFactButton) {
+      // var dataObject = {
+      //   username: userName1.value,
+      //   password: userPassword1.value
+      // }
+      // if (dataObject.username === "") {  // blank usernames not supported
+      //   delete dataObject.username;
+      // }
+      // if (dataObject.password === "") { // blank passwords not supported
+      //   delete dataObject.password;
+      // }
+      fetch(`${users_path}/${userID.value}`,
+        { method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(dataObject)
+        }
+      ).then((response) => {
+        if (response.status === 200) {
+          response.json().then((data) => {
+            resultsDiv.innerHTML = '';
+            let parag = document.createElement('P');
+            parag.textContent = JSON.stringify(data);
+            resultsDiv.appendChild(parag);
+          });
+        } else {
+          alert(`Return code ${response.status} ${response.statusText}`);
+        }
+      });
+    } else if (event.target === listFactsButton) {
+      fetch(facts_path).then((response) => {
+        if (response.status === 200) {
+          resultsDiv.innerHTML = '';
+          response.json().then((data) => {
+            for (let i=0; i<data.length; i++) {
+              let parag = document.createElement('P');
+              parag.textContent = JSON.stringify(data[i]);
+              resultsDiv.appendChild(parag);
+            }
+          });
+        } else {
+          alert(`Return code ${response.status} ${response.statusText}`);
+        }
+      });
+    } else if (event.target === deleteUserButton) {
+      // var dataObject = {
+      //   username: userName1.value,
+      //   password: userPassword1.value
+      // }
+      // if (dataObject.username === "") {  // blank usernames not supported
+      //   delete dataObject.username;
+      // }
+      // if (dataObject.password === "") { // blank passwords not supported
+      //   delete dataObject.password;
+      // }
+      fetch(`${users_path}/${userID.value}`,
+        { method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(dataObject)
+        }
+      ).then((response) => {
+        if (response.status === 200) {
+          response.json().then((data) => {
+            resultsDiv.innerHTML = '';
+            let parag = document.createElement('P');
+            parag.textContent = JSON.stringify(data);
+            resultsDiv.appendChild(parag);
+          });
+        } else {
+          alert(`Return code ${response.status} ${response.statusText}`);
+        }
+      });
+    } else if (event.target === listFactsButton) {
+      fetch(facts_path).then((response) => {
+        if (response.status === 200) {
+          resultsDiv.innerHTML = '';
+          response.json().then((data) => {
+            for (let i=0; i<data.length; i++) {
+              let parag = document.createElement('P');
+              parag.textContent = JSON.stringify(data[i]);
+              resultsDiv.appendChild(parag);
+            }
+          });
+        } else {
           response.json().then((data) => {
             alert(`Return code ${response.status} ${response.statusText} ${JSON.stringify(data)}`);
           }).catch((error) => {
@@ -94,3 +237,5 @@ function handle_ajax(event) {
     }
   });
 }
+
+
